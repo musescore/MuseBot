@@ -52,7 +52,7 @@ func (config) Version() string {
 
 // Description return program description string
 func (config) Description() string {
-	return "Really fast sync tool for S3"
+	return "Musescore telegram bot"
 }
 
 // GetConfig parse config, set default values, check input values and return configParsed struct
