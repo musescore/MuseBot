@@ -50,5 +50,3 @@ func ParseMessage(message *tg.Message) ([]Message, error) {
 
 	return messages, nil
 }
-
-

@@ -158,7 +158,7 @@ func BotSender(b *tb.Bot, input <-chan Message) {
 			continue
 		}
 		for _, i := range integrations {
-			if msg, err := b.Send(&tb.Chat{ID: i.ChatID}, text, tb.ModeHTML); err != nil {
+			if msg, err := b.Send(&tb.Chat{ID: i.ChatID}, text, message.GetTgOptions()...); err != nil {
 				log.Errorf("Failed to send message to chat: %d, error: %s", i.ChatID, err)
 				continue
 			} else {

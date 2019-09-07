@@ -5,6 +5,7 @@ import (
 	"MuseBot/utils"
 	"errors"
 	"fmt"
+	tb "gopkg.in/tucnak/telebot.v2"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -14,6 +15,7 @@ var SkipMessage = errors.New("skip message")
 
 type Message interface {
 	GetText() (string, error)
+	GetTgOptions() []interface{}
 }
 
 type PRMessage struct {
@@ -29,6 +31,10 @@ func (m PRMessage) GetText() (string, error) {
 	return "", SkipMessage
 }
 
+func (m PRMessage) GetTgOptions() []interface{} {
+	return []interface{}{tb.ModeHTML}
+}
+
 type NodeMessage struct {
 	ID      int
 	BaseUrl string
@@ -40,6 +46,10 @@ func (m NodeMessage) GetText() (string, error) {
 		return fmt.Sprintf("<a href='%s'>Node #%d</a>", url, m.ID), nil
 	}
 	return "", SkipMessage
+}
+
+func (m NodeMessage) GetTgOptions() []interface{} {
+	return []interface{}{tb.ModeHTML}
 }
 
 type WikiMessage struct {
@@ -55,12 +65,20 @@ func (m WikiMessage) GetText() (string, error) {
 	return fmt.Sprintf("<a href='%s'>%s</a>", url, m.Texts[i]), nil
 }
 
+func (m WikiMessage) GetTgOptions() []interface{} {
+	return []interface{}{tb.ModeHTML}
+}
+
 type BasicMessage struct {
 	Text string
 }
 
 func (m BasicMessage) GetText() (string, error) {
 	return m.Text, nil
+}
+
+func (m BasicMessage) GetTgOptions() []interface{} {
+	return []interface{}{tb.ModeHTML}
 }
 
 type BasicRandMessage struct {
@@ -70,6 +88,10 @@ type BasicRandMessage struct {
 func (m BasicRandMessage) GetText() (string, error) {
 	i := rand.Intn(len(m.Texts))
 	return m.Texts[i], nil
+}
+
+func (m BasicRandMessage) GetTgOptions() []interface{} {
+	return []interface{}{tb.ModeHTML}
 }
 
 type TravisHookMessage struct {
@@ -105,6 +127,10 @@ func (m TravisHookMessage) GetText() (string, error) {
 	return msg, nil
 }
 
+func (m TravisHookMessage) GetTgOptions() []interface{} {
+	return []interface{}{tb.ModeHTML}
+}
+
 type GitHubHookPRMessage struct {
 	Payload models.GitHubPRPayload
 }
@@ -118,6 +144,10 @@ func (m GitHubHookPRMessage) GetText() (string, error) {
 		utils.SanitizeText(m.Payload.PullRequest.Title), m.Payload.PullRequest.User.Login,
 	)
 	return msg, nil
+}
+
+func (m GitHubHookPRMessage) GetTgOptions() []interface{} {
+	return []interface{}{tb.ModeHTML}
 }
 
 type GitHubHookPushMessage struct {
@@ -139,4 +169,8 @@ func (m GitHubHookPushMessage) GetText() (string, error) {
 		msg = fmt.Sprintf("%s pushed commit to %s: %s", m.Payload.Pusher.Name, branch, commitLink)
 	}
 	return msg, nil
+}
+
+func (m GitHubHookPushMessage) GetTgOptions() []interface{} {
+	return []interface{}{tb.ModeHTML, tb.NoPreview}
 }
