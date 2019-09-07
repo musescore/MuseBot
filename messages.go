@@ -81,6 +81,10 @@ func (m TravisHookMessage) GetText() (string, error) {
 		return "", SkipMessage
 	}
 
+	if strings.ToLower(m.Payload.Repository.OwnerName) != "musescore" {
+		return "", SkipMessage
+	}
+
 	status := ""
 	switch strings.ToLower(m.Payload.StatusMessage) {
 	case "fixed":
@@ -91,14 +95,8 @@ func (m TravisHookMessage) GetText() (string, error) {
 		status = "is still failing"
 	case "errored":
 		status = "has errored"
-	case "passed":
-		status = "has been successful"
-	case "failed":
-		status = "has been failed"
-	case "canceled":
-		status = "has been canceled"
 	default:
-		status = "has unknown status"
+		return "", SkipMessage
 	}
 
 	commitUrl := fmt.Sprintf("<a href='%s%s'>%s</a>", Config.GitHubCommitUrl, m.Payload.Commit, m.Payload.Commit[0:6])
