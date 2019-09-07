@@ -26,7 +26,7 @@ func (m PRMessage) GetText() (string, error) {
 	if utils.CheckUrlExist(url) {
 		return fmt.Sprintf("<a href='%s'>PR #%d</a>", url, m.ID), nil
 	}
-	return "", fmt.Errorf("PR does not exist: %s", url)
+	return "", SkipMessage
 }
 
 type NodeMessage struct {
@@ -39,7 +39,7 @@ func (m NodeMessage) GetText() (string, error) {
 	if utils.CheckUrlExist(url) {
 		return fmt.Sprintf("<a href='%s'>Node #%d</a>", url, m.ID), nil
 	}
-	return "", fmt.Errorf("PR does not exist: %s", url)
+	return "", SkipMessage
 }
 
 type WikiMessage struct {
