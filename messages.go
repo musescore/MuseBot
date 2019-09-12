@@ -147,7 +147,7 @@ func (m GitHubHookPRMessage) GetText() (string, error) {
 }
 
 func (m GitHubHookPRMessage) GetTgOptions() []interface{} {
-	return []interface{}{tb.ModeHTML}
+	return []interface{}{tb.ModeHTML, tb.NoPreview}
 }
 
 type GitHubHookPushMessage struct {
